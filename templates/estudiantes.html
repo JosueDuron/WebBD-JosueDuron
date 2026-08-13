@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Estudiantes{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Estudiantes</h1>
+    <a href="{{ url_for('crear_estudiante') }}" class="btn btn-success">
+        <i class="fa-solid fa-plus"></i> Nuevo estudiante
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if estudiantes %}
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Curso</th>
+                    <th>Registrado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for est in estudiantes %}
+                <tr>
+                    <td>{{ est.id }}</td>
+                    <td>{{ est.nombre }}</td>
+                    <td>{{ est.correo }}</td>
+                    <td><span class="badge bg-primary">{{ est.curso.nombre }}</span></td>
+                    <td>{{ est.fecha_registro.strftime('%d/%m/%Y') }}</td>
+                    <td class="text-end">
+                        <a href="{{ url_for('editar_estudiante', estudiante_id=est.id) }}" class="btn btn-sm btn-outline-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <form action="{{ url_for('eliminar_estudiante', estudiante_id=est.id) }}" method="POST" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar este estudiante?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted mb-0">No hay estudiantes registrados todavía.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
